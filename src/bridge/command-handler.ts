@@ -66,6 +66,7 @@ export class CommandHandler {
     this.audit.log({ event: 'command', botName: this.config.name, chatId, userId, prompt: cmd });
 
     switch (cmd.toLowerCase()) {
+      case '/':
       case '/?':
       case '/help':
         await this.sender.sendTextNotice(chatId, '📖 Help', [
