@@ -1,11 +1,23 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.bridge.json" },
-    { "path": "./packages/cli-core" },
-    { "path": "./packages/metamemory" },
-    { "path": "./packages/skill-hub" },
-    { "path": "./packages/cli" },
-    { "path": "./packages/server" }
+    {
+      "path": "./tsconfig.bridge.json"
+    },
+    {
+      "path": "./packages/cli-core"
+    },
+    {
+      "path": "./packages/metamemory"
+    },
+    {
+      "path": "./packages/skill-hub"
+    },
+    {
+      "path": "./packages/cli"
+    },
+    {
+      "path": "./packages/server"
+    }
   ]
 }

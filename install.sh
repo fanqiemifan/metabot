@@ -278,8 +278,10 @@ version_at_least() {
   [[ "$current" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || return 1
   [[ "$required" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || return 1
 
-  IFS=. read -r current_major current_minor current_patch <<< "$current"
-  IFS=. read -r required_major required_minor required_patch <<< "$required"
+  current_major="${current%%.*}"; required_major="${required%%.*}"
+  current_minor="${current#*.}"; current_minor="${current_minor%%.*}"
+  required_minor="${required#*.}"; required_minor="${required_minor%%.*}"
+  current_patch="${current##*.}"; required_patch="${required##*.}"
   (( current_major > required_major )) ||
     (( current_major == required_major && current_minor > required_minor )) ||
     (( current_major == required_major && current_minor == required_minor && current_patch >= required_patch ))

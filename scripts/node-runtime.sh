@@ -4,7 +4,14 @@
 metabot_select_node() {
   local target="${1:-$METABOT_HOME}" selected="${METABOT_NODE_PATH:-}" configured="" dir clean=""
   local -a dirs
-  IFS=: read -r -a dirs <<< "$PATH"
+  local _rest="$PATH"
+  dirs=()
+  while :; do
+    case "$_rest" in
+      *:*) dirs+=("${_rest%%:*}"); _rest="${_rest#*:}" ;;
+      *) dirs+=("$_rest"); break ;;
+    esac
+  done
   for dir in "${dirs[@]}"; do
     case "$dir" in *[Cc]ursor*) continue ;; esac
     [[ -n "$dir" ]] && clean="${clean:+$clean:}$dir"

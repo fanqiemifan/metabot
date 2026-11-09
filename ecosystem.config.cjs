@@ -34,6 +34,14 @@ module.exports = {
         NODE_ENV: 'production',
         BOTS_CONFIG: process.env.BOTS_CONFIG || path.join(__dirname, 'bots.json'),
         CLAUDE_MAX_TURNS: '',  // unlimited turns (override any inherited shell env)
+        // Strip inherited proxy settings (e.g. a dead IDE proxy) so local Core
+        // calls and Codex outbound requests never route through a dead port.
+        HTTP_PROXY: '',
+        HTTPS_PROXY: '',
+        http_proxy: '',
+        https_proxy: '',
+        ALL_PROXY: '',
+        NO_PROXY: 'localhost,127.0.0.1,::1',
       },
     },
   ],
