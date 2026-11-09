@@ -58,6 +58,12 @@ export class CommandHandler {
   /** Returns true if the message was handled as a command, false otherwise. */
   async handle(msg: IncomingMessage): Promise<boolean> {
     const { text } = msg;
+    // 飞书客户端有时会把以 "/" 开头的消息吞掉（不发给机器人）。
+    // 这几个纯文本别名走同一条帮助路径，绕开客户端行为。
+    const bare = text.trim().toLowerCase();
+    if (bare === 'help' || bare === '帮助' || bare === '菜单' || bare === '命令') {
+      return this.handle({ ...msg, text: '/help' });
+    }
     if (!text.startsWith('/')) return false;
 
     const { userId, chatId } = msg;
