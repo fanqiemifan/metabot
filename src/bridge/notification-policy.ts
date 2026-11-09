@@ -20,6 +20,11 @@ export async function sendCompletionNotice(opts: {
 }): Promise<void> {
   const { sender, config, logger, chatId, state, durationMs } = opts;
 
+  // 卡片里已经有 🟢 Complete，这条 "✅ Done" 是重复噪音 → 默认不发。
+  // 失败（❌ Failed）保留，因为那是需要人知道的结果。
+  // 需要恢复：METABOT_COMPLETION_NOTICE=1
+  if (state.status === 'complete' && process.env.METABOT_COMPLETION_NOTICE !== '1') return;
+
   if (sender.skipCompletionNotice) return;
   if (state.status === 'complete' && isVoiceReplyEnabled(config)) return;
   if (durationMs < COMPLETION_NOTICE_MIN_DURATION_MS) return;
