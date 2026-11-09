@@ -80,6 +80,8 @@ export interface CardState {
   model?: string;
   /** Total input+output tokens consumed */
   totalTokens?: number;
+  /** Output (generated) tokens for this turn — used for the tok/s footer */
+  outputTokens?: number;
   /** Context window size of the primary model */
   contextWindow?: number;
   /** Cumulative session cost (USD), accumulated across queries until /reset */

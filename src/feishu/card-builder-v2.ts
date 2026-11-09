@@ -256,6 +256,10 @@ export function buildCardV2(state: CardState): string {
       if (state.sessionCostUsd != null) parts.push(`$${state.sessionCostUsd.toFixed(2)}`);
       if (state.model) parts.push(state.model.replace(/^claude-/, ''));
       if (state.durationMs !== undefined) parts.push(`${(state.durationMs / 1000).toFixed(1)}s`);
+      if (state.outputTokens && state.durationMs && state.durationMs > 500) {
+        const tps = state.outputTokens / (state.durationMs / 1000);
+        parts.push(`≈${tps >= 100 ? Math.round(tps) : tps.toFixed(1)} tok/s`);
+      }
     }
     if (parts.length > 0) {
       elements.push({

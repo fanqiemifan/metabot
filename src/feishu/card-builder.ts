@@ -181,6 +181,10 @@ export function buildCard(state: CardState): string {
       if (state.durationMs !== undefined) {
         parts.push(`${(state.durationMs / 1000).toFixed(1)}s`);
       }
+      if (state.outputTokens && state.durationMs && state.durationMs > 500) {
+        const tps = state.outputTokens / (state.durationMs / 1000);
+        parts.push(`≈${tps >= 100 ? Math.round(tps) : tps.toFixed(1)} tok/s`);
+      }
     }
     if (parts.length > 0) {
       elements.push({

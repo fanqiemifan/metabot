@@ -37,6 +37,7 @@ export class StreamProcessor {
   private _planContent: string | null = null;
   private _model: string | undefined;
   private _totalTokens: number | undefined;
+  private _outputTokens: number | undefined;
   private _contextWindow: number | undefined;
   // Track per-API-call usage from stream events for accurate context window display
   private _lastInputTokens: number | undefined;
@@ -98,6 +99,7 @@ export class StreamProcessor {
       durationMs: this.durationMs,
       model: this._model,
       totalTokens: this._totalTokens,
+      outputTokens: this._outputTokens,
       contextWindow: this._contextWindow,
       pendingQuestion: this._pendingQuestions[0] || undefined,
       backgroundEvents: this._backgroundEvents.size > 0
@@ -282,6 +284,15 @@ export class StreamProcessor {
           }
           this._totalTokens = totalTokens;
         }
+        // Output tokens drive the tok/s footer. Use max() so repeated
+        // per-event snapshots (cumulative) never double-count.
+        let outputTokens = 0;
+        for (const m of models) {
+          outputTokens += (message.modelUsage![m].outputTokens ?? 0);
+        }
+        if (outputTokens > 0) {
+          this._outputTokens = Math.max(this._outputTokens ?? 0, outputTokens);
+        }
       }
     }
 
@@ -307,6 +318,7 @@ export class StreamProcessor {
         : isApiError ? resultText : undefined,
       model: this._model,
       totalTokens: this._totalTokens,
+      outputTokens: this._outputTokens,
       contextWindow: this._contextWindow,
       backgroundEvents: this._backgroundEvents.size > 0
         ? [...this._backgroundEvents.values()]
@@ -416,6 +428,7 @@ export class StreamProcessor {
       durationMs: this.durationMs,
       model: this._model,
       totalTokens: this._totalTokens,
+      outputTokens: this._outputTokens,
       contextWindow: this._contextWindow,
       pendingQuestion: this._pendingQuestions[0] || undefined,
       backgroundEvents: this._backgroundEvents.size > 0
