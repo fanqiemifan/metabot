@@ -427,6 +427,11 @@ export class AgentTeamSupervisor {
   }
 
   private notifyTeamActivity(teamName: string, agentName: string, body: string): void {
+    // Attention budget (super-agent contract): these system cards are posted to
+    // displayChatIds — the bare group chat — so they land OUTSIDE the topic the
+    // user is actually talking in, and they duplicate what the Lead reports.
+    // Default OFF; set METABOT_TEAM_ACTIVITY_CARDS=1 to re-enable.
+    if (process.env.METABOT_TEAM_ACTIVITY_CARDS !== '1') return;
     const team = this.options.store.getTeam(teamName);
     if (!team || team.status !== 'active') return;
     const chatIds = team.displayChatIds;
